@@ -26,12 +26,12 @@ Features include:
 - Getting Field information from data sources and workbooks
   - Get all fields in a data source
   - Get all fields in use by certain sheets in a workbook
-Getting and updating folder information
+- Getting and updating folder information
   - Query all existing folders
   - Add folders
   - Add fields to folders
   - Remove fields from folders
-  
+
 For Hyper files, take a look at the [Tableau Hyper API](https://help.tableau.com/current/api/hyper_api/en-us/index.html).
 
 We don't support creating files from scratch, adding extracts into workbooks or data sources, or updating field information
