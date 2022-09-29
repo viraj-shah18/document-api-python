@@ -1,4 +1,4 @@
-import xml.etree.ElementTree as ET
+from lxml import etree as ET
 from functools import wraps
 
 from tableaudocumentapi import Field
