@@ -28,7 +28,7 @@ def argument_is_one_of(*allowed_values):
             if value not in allowed_values:
                 error = "Invalid argument: {0}. {1} must be one of {2}."
                 msg = error.format(value, func.__name__, allowed_values)
-                raise ValueError(error)
+                raise ValueError(msg)
             return func(self, value)
         return wrapper
     return property_type_decorator
