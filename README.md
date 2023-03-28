@@ -22,6 +22,11 @@ Features include:
 - Getting Field information from data sources and workbooks
   - Get all fields in a data source
   - Get all fields in use by certain sheets in a workbook
+- Getting and updating folder information
+  - Query all existing folders
+  - Add folders
+  - Add fields to folders
+  - Remove fields from folders
 
 - It *doesn't* support creating files from scratch, adding extracts into workbooks or data sources, or updating field information. As of 2021, this SDK no longer supports Python 2.
 
