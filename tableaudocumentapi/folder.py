@@ -62,7 +62,7 @@ class Folder(object):
         self._datasource = datasource
         self._xml = xml
         self.name = self._xml.get('name', None)
-        self.role = self._xml.get('role', None)
+        # self.role = self._xml.get('role', None)
         folder_item_xml = self._xml.findall('folder-item')
         self._folder_items = [FolderItem.from_xml(xml) for xml in folder_item_xml]
 
@@ -80,6 +80,16 @@ class Folder(object):
         attributes = {
             'name': name,
             'role': role
+        }
+        xml = ET.Element('folder', attrib=attributes)
+        return cls(parent_datasource, xml)
+
+    @classmethod
+    def from_name(cls, name, parent_datasource):
+        """Creates a new folder with a given name and a given role.
+        """
+        attributes = {
+            'name': name
         }
         xml = ET.Element('folder', attrib=attributes)
         return cls(parent_datasource, xml)
