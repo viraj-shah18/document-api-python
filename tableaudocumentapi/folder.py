@@ -62,7 +62,7 @@ class Folder(object):
         self._datasource = datasource
         self._xml = xml
         self.name = self._xml.get('name', None)
-        # self.role = self._xml.get('role', None)
+        self.role = self._xml.get('role', None)
         folder_item_xml = self._xml.findall('folder-item')
         self._folder_items = [FolderItem.from_xml(xml) for xml in folder_item_xml]
 
@@ -86,7 +86,7 @@ class Folder(object):
 
     @classmethod
     def from_name(cls, name, parent_datasource):
-        """Creates a new folder with a given name and a given role.
+        """Creates a new folder with a given name
         """
         attributes = {
             'name': name
@@ -118,10 +118,11 @@ class Folder(object):
         return self._xml
 
     @role.setter
-    @argument_is_one_of('dimensions', 'measures')
+    @argument_is_one_of('dimensions', 'measures', None)
     def role(self, role):
         self._role = role
-        self._xml.set('role', role)
+        if self._role is not None:
+            self._xml.set('role', role)
 
     # Functions that deal with folder-items
 
