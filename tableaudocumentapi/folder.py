@@ -84,6 +84,16 @@ class Folder(object):
         xml = ET.Element('folder', attrib=attributes)
         return cls(parent_datasource, xml)
 
+    @classmethod
+    def from_name(cls, name, parent_datasource):
+        """Creates a new folder with a given name
+        """
+        attributes = {
+            'name': name
+        }
+        xml = ET.Element('folder', attrib=attributes)
+        return cls(parent_datasource, xml)
+
     # Properties
 
     @property
@@ -108,10 +118,11 @@ class Folder(object):
         return self._xml
 
     @role.setter
-    @argument_is_one_of('dimensions', 'measures')
+    @argument_is_one_of('dimensions', 'measures', None)
     def role(self, role):
         self._role = role
-        self._xml.set('role', role)
+        if self._role is not None:
+            self._xml.set('role', role)
 
     # Functions that deal with folder-items
 

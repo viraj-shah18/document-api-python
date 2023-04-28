@@ -259,7 +259,7 @@ class Datasource(object):
         folders = Folder.all_folders_from_datasource(self)
         self._folders = {f.name: f for f in folders}
 
-    def add_folder(self, name, role):
+    def add_folder(self, name, role=None):
         """ Adds a new, empty folder to the datasource and returns it.
 
         Will fail if another folder of the same name already exists,
@@ -271,9 +271,21 @@ class Datasource(object):
 
         # Create the folder object
         parent_datasource = self  # The parent of the new folder is the current datasource
-        folder = Folder.from_name_and_role(name, role, parent_datasource)
+        if role is None:
+            folder = Folder.from_name(name, parent_datasource)
+        else:
+            folder = Folder.from_name_and_role(name, role, parent_datasource)
         # Add the folder xml to the datasources xml
-        self._datasourceXML.append(folder.xml)
+
+        if len(self._folders.values()) == 0:
+            print("There are no folders present in the file. Please add one placeholder folder before executing")
+            raise NotImplementedError
+
+        # trick is to find the last folder tag and add to it
+        folder_xml = self._datasourceTree.find(".//folder")[0]
+        folder_parent = folder_xml.getparent()
+        folder_parent.addnext(folder.xml)
+
         self._refresh_folders()
         return folder
       
@@ -355,34 +367,3 @@ class Datasource(object):
 
 
         return field
-
-    ###########
-    # folders
-    ###########
-    @property
-    def folders(self):
-        if not self._folders:
-            self._refresh_folders()
-        return self._folders
-
-    def _refresh_folders(self):
-        folders = Folder.all_folders_from_datasource(self)
-        self._folders = {f.name: f for f in folders}
-
-    def add_folder(self, name, role):
-        """ Adds a new, empty folder to the datasource and returns it.
-
-        Will fail if another folder of the same name already exists,
-        or if no valid role (dimensions or measures) is provided.
-        """
-
-        if name in self.folders.keys():
-            raise ValueError('Folder names must be unique')
-
-        # Create the folder object
-        parent_datasource = self  # The parent of the new folder is the current datasource
-        folder = Folder.from_name_and_role(name, role, parent_datasource)
-        # Add the folder xml to the datasources xml
-        self._datasourceXML.append(folder.xml)
-        self._refresh_folders()
-        return folder
