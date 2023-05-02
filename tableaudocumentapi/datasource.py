@@ -1,4 +1,5 @@
 import collections
+import pathlib
 import itertools
 from lxml import etree as ET
 import xml.sax.saxutils as sax
@@ -281,7 +282,7 @@ class Datasource(object):
             print("There are no folders present in the file. Please add one placeholder folder before executing")
             raise NotImplementedError
 
-        # trick is to find the last folder tag and add to it
+        # trick is to find the first folder tag and add to it
         folder_xml = self._datasourceTree.find(".//folder")[0]
         folder_parent = folder_xml.getparent()
         folder_parent.addnext(folder.xml)
@@ -367,3 +368,18 @@ class Datasource(object):
 
 
         return field
+
+    def add_to_saved_datasources(self, save_directory=None):
+        '''
+        replicates add to saved datasources functionality 
+        using caption of the datasource as file name
+        '''
+        if self._filename is None:
+            self._filename = self.caption
+        if save_directory is None:
+            self.save()
+            return
+
+        save_path = save_directory.joinpath(self._filename)
+        self.save_as(save_path)
+        return
