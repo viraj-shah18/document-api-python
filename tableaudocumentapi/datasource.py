@@ -375,11 +375,11 @@ class Datasource(object):
         using caption of the datasource as file name
         '''
         if self._filename is None:
-            self._filename = self.caption
+            self._filename = f"{self.caption}.tds"
         if save_directory is None:
             self.save()
-            return
+            return self._filename
 
         save_path = save_directory.joinpath(self._filename)
         self.save_as(save_path)
-        return
+        return save_path
