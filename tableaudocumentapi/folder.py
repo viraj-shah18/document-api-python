@@ -126,7 +126,7 @@ class Folder(object):
 
     # Functions that deal with folder-items
 
-    def add_field(self, field):
+    def add_field(self, field, move=False):
         """ Adds a field to this folder
         """
         if not isinstance(field, Field):
@@ -134,8 +134,19 @@ class Folder(object):
             raise ValueError(msg.format(type(field)))
         if self.has_item(field):
             raise AlreadyMemberOfThisFolderException(field)
-        if any(f.has_item(field) for f in self._datasource.folders.values()):
-            raise MemberOfMultipleFoldersException(field)
+        for f in self._datasource.folders.values():
+            # if field is not present in folder => continue
+            if not f.has_item(field):
+                continue
+
+            # if field is present in folder but moving between folders is not allowed
+            # => raise exception
+            if not move:
+                raise MemberOfMultipleFoldersException(field)
+            
+            # when moving from one folder to another is allowed
+            # => remove from current folder and add to given folder at the end.
+            f.remove_field(field)
 
         self._add_field(field)
 
