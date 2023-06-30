@@ -1,3 +1,9 @@
+## 012 (July 2023)
+* Adding saved to datasources for workbook
+* Adding fields to folders
+* Making roles optional
+* Adding moving between folders
+
 ## 011 (November 2022)
 * Remove extraneous debug print statements
 
