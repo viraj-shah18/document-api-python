@@ -155,3 +155,48 @@ class Workbook(object):
             shapes.append(shape_name)
 
         return shapes
+
+    def add_datasource(self, datasource: Datasource):
+        
+        ds_name = datasource.caption
+        if ds_name in self._datasource_index.keys():
+            raise ValueError('Datasource names must be unique')
+        
+        # if len(self._datasource_index.keys()) == 0:
+        if weakref.getweakrefcount(self._datasource_index) == 0:
+            raise NotImplementedError("There are no datasources present in the workbook.")
+        
+        self._add_datasource(datasource)
+
+    def _add_datasource(self, datasource: Datasource):
+        # trick is to find the first datasource tag and add to it
+        folder_xml = self._workbookTree.find(".//datasource")[0]
+        folder_parent = folder_xml.getparent()
+        folder_parent.addnext(datasource._datasourceXML)
+
+        self._datasources = self._prepare_datasources(
+            self._workbookRoot)
+
+        self._datasource_index = self._prepare_datasource_index(self._datasources)
+
+    def remove_datasource(self, datasource: Datasource):
+        # check if args are compliant
+        if not datasource or not isinstance(datasource, Datasource):
+            raise ValueError("Need to supply a datasource to remove it from workbook")
+        
+        # check if datasource exists
+        if datasource.name not in self._datasource_index.keys():
+            raise NameError(f"{datasource.caption} doesn't exists in workbook")
+        
+        self._remove_datasource(datasource)
+
+        self._datasources = self._prepare_datasources(
+            self._workbookRoot)
+
+        self._datasource_index = self._prepare_datasource_index(self._datasources)
+        
+
+    def _remove_datasource(self, datasource: Datasource):
+        datasources = self._workbookTree.find(".//datasources")
+        datasources.remove(datasource._datasourceXML)
+        # self._workbookTree.getroot().remove(datasource._datasourceXML)
