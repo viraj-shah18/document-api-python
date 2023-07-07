@@ -155,3 +155,25 @@ class Workbook(object):
             shapes.append(shape_name)
 
         return shapes
+
+    def add_datasource(self, datasource: Datasource):
+        
+        ds_name = datasource.caption
+        if ds_name in self._datasource_index.keys():
+            raise ValueError('Datasource names must be unique')
+        
+        if len(self._datasource_index.keys()) == 0:
+            raise NotImplementedError("There are no folders present in the file. Please add one placeholder folder before executing")
+        
+        self._add_datasource(datasource)
+
+    def _add_datasource(self, datasource: Datasource):
+        # trick is to find the first datasource tag and add to it
+        folder_xml = self._workbookTree.find(".//datasource")[0]
+        folder_parent = folder_xml.getparent()
+        folder_parent.addnext(datasource._datasourceXML)
+
+        self._datasources = self._prepare_datasources(
+            self._workbookRoot)
+
+        self._datasource_index = self._prepare_datasource_index(self._datasources)
