@@ -162,8 +162,9 @@ class Workbook(object):
         if ds_name in self._datasource_index.keys():
             raise ValueError('Datasource names must be unique')
         
-        if len(self._datasource_index.keys()) == 0:
-            raise NotImplementedError("There are no folders present in the file. Please add one placeholder folder before executing")
+        # if len(self._datasource_index.keys()) == 0:
+        if weakref.getweakrefcount(self._datasource_index) == 0:
+            raise NotImplementedError("There are no datasources present in the workbook.")
         
         self._add_datasource(datasource)
 
