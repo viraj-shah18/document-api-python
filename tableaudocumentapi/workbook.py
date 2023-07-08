@@ -185,7 +185,7 @@ class Workbook(object):
             raise ValueError("Need to supply a datasource to remove it from workbook")
         
         # check if datasource exists
-        if datasource.caption not in self._datasource_index.keys():
+        if datasource.name not in self._datasource_index.keys():
             raise NameError(f"{datasource.caption} doesn't exists in workbook")
         
         self._remove_datasource(datasource)
