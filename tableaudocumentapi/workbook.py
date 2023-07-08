@@ -178,3 +178,23 @@ class Workbook(object):
             self._workbookRoot)
 
         self._datasource_index = self._prepare_datasource_index(self._datasources)
+
+    def remove_datasource(self, datasource: Datasource):
+        # check if args are compliant
+        if not datasource or isinstance(datasource, Datasource):
+            raise ValueError("Need to supply a datasource to remove it from workbook")
+        
+        # check if datasource exists
+        if datasource.caption not in self._datasource_index.keys():
+            raise NameError(f"{datasource.caption} doesn't exists in workbook")
+        
+        self._remove_datasource(datasource)
+
+        self._datasources = self._prepare_datasources(
+            self._workbookRoot)
+
+        self._datasource_index = self._prepare_datasource_index(self._datasources)
+        
+
+    def _remove_datasource(self, datasource: Datasource):
+        self._workbookTree.getroot().remove(datasource._datasourceXML)
