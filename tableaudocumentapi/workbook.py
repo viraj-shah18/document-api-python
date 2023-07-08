@@ -197,4 +197,6 @@ class Workbook(object):
         
 
     def _remove_datasource(self, datasource: Datasource):
-        self._workbookTree.getroot().remove(datasource._datasourceXML)
+        datasources = self._workbookTree.find(".//datasources")
+        datasources.remove(datasource._datasourceXML)
+        # self._workbookTree.getroot().remove(datasource._datasourceXML)
