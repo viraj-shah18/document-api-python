@@ -181,7 +181,7 @@ class Workbook(object):
 
     def remove_datasource(self, datasource: Datasource):
         # check if args are compliant
-        if not datasource or isinstance(datasource, Datasource):
+        if not datasource or not isinstance(datasource, Datasource):
             raise ValueError("Need to supply a datasource to remove it from workbook")
         
         # check if datasource exists
