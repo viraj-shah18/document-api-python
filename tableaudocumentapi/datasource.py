@@ -283,7 +283,7 @@ class Datasource(object):
             raise NotImplementedError
 
         # trick is to find the first folder tag and add to it
-        folder_xml = self._datasourceTree.find(".//folder")[0]
+        folder_xml = self._datasourceTree.find(".//folder")
         folder_parent = folder_xml.getparent()
         folder_parent.addnext(folder.xml)
 
